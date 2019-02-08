@@ -1,0 +1,23 @@
+{
+    "name": "wintech/hotel-locks",
+    "description": "Hotel locks",
+    "type": "library",
+    "minimum-stability": "dev",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "Ilya Shibailo",
+            "email": "ilya.shibailo@gmail.com"
+        }
+    ],
+    "require":
+    {
+        "php": "^5.5.9 || ^7.0"
+    },
+    "autoload":
+    {
+        "psr-4": {
+            "Wintech\\HotelLocks\\": "src"
+        }
+    }
+}
