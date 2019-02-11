@@ -9,6 +9,20 @@ use Wintech\HotelLocks\Validator\DdssAddressValidator;
 
 class XeederKeyService extends KeyService implements KeyServiceInterface
 {
+    /**
+     * @var string
+     */
+    private $serverAddress;
+
+    /**
+     * XeederKeyService constructor.
+     * @param string $serverAddress
+     */
+    public function __construct(?string $serverAddress)
+    {
+       $this->serverAddress = $serverAddress;
+    }
+
     const FIELD_GUEST_CHECK_IN    = '0I';
     const FIELD_GUEST_CHECK_OUT   = '0B';
     const FIELD_ROOM_NUMBER       = 'R';
@@ -46,7 +60,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
     public function sendCommand(string $commandString)
     {
-        $stream = stream_socket_client("tcp://192.168.11.149:8000", $errno, $errstr, 10);
+        $stream = stream_socket_client($this->serverAddress, $errno, $errstr, 10);
 
         if (!$stream) {
             throw new HotelLockException();
