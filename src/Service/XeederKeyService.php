@@ -86,7 +86,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
         if($room->getCommonDoorCodes())
         {
-            $command .= chr(124) . self::FIELD_COMMON_ROOM_NUMBERS . implode(',', $room->getCommonDoorCodes());
+            $command .= chr(124) . self::FIELD_COMMON_ROOM_NUMBERS . implode('', $room->getCommonDoorCodes());
         }
 
         return $this->sendCommand($command);
