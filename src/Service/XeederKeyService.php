@@ -41,34 +41,34 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
     private static function getErrorMessageByCode($code): ?string
     {
         $errors = [
-            chr(2).'000001'.chr(3) => 'No card',
-            chr(2).'000002'.chr(3) => 'No encoder found',
-            chr(2).'000003'.chr(3) => 'Invalid card',
-            chr(2).'000004'.chr(3) => 'Card type error',
-            chr(2).'000005'.chr(3) => 'Card read/write error',
-            chr(2).'000006'.chr(3) => 'Com port is not open',
-            chr(2).'000007'.chr(3) => 'Read Query card ok',
-            chr(2).'000008'.chr(3) => 'Invalid parameter',
-            chr(2).'000009'.chr(3) => 'Operating not support',
-            chr(2).'000010'.chr(3) => 'Other error',
-            chr(2).'000011'.chr(3) => 'Port is in using',
-            chr(2).'000012'.chr(3) => 'Communication error',
-            chr(2).'000013'.chr(3) => 'Card is not empty, revoke it firstly',
-            chr(2).'000014'.chr(3) => 'Failed! Card Encryption is unknown',
-            chr(2).'000015'.chr(3) => 'Operating failed',
-            chr(2).'000016'.chr(3) => 'Unknown error',
-            chr(2).'000017'.chr(3) => 'Card count over limit',
-            chr(2).'000018'.chr(3) => 'Invalid room number',
-            chr(2).'000019'.chr(3) => 'Please input one room number',
-            chr(2).'000020'.chr(3) => 'Empty card',
-            chr(2).'000023'.chr(3) => 'Not Guest Card',
+            chr(2).'000001'.chr(3) => '(01): No card',
+            chr(2).'000002'.chr(3) => '(02): No encoder found',
+            chr(2).'000003'.chr(3) => '(03): Invalid card',
+            chr(2).'000004'.chr(3) => '(04): Card type error',
+            chr(2).'000005'.chr(3) => '(05): Card read/write error',
+            chr(2).'000006'.chr(3) => '(06): Com port is not open',
+            chr(2).'000007'.chr(3) => '(07): Read Query card ok',
+            chr(2).'000008'.chr(3) => '(08): Invalid parameter',
+            chr(2).'000009'.chr(3) => '(09): Operating not support',
+            chr(2).'000010'.chr(3) => '(10): Other error',
+            chr(2).'000011'.chr(3) => '(11): Port is in using',
+            chr(2).'000012'.chr(3) => '(12): Communication error',
+            chr(2).'000013'.chr(3) => '(13): Card is not empty, revoke it firstly',
+            chr(2).'000014'.chr(3) => '(14): Failed! Card Encryption is unknown',
+            chr(2).'000015'.chr(3) => '(15): Operating failed',
+            chr(2).'000016'.chr(3) => '(16): Unknown error',
+            chr(2).'000017'.chr(3) => '(17): Card count over limit',
+            chr(2).'000018'.chr(3) => '(18): Invalid room number',
+            chr(2).'000019'.chr(3) => '(19): Please input one room number',
+            chr(2).'000020'.chr(3) => '(20): Empty card',
+            chr(2).'000023'.chr(3) => '(23): Not Guest Card',
         ];
 
         if(isset($errors[$code])) {
-           return $errors[$code];
+           return 'Xeeder encoding error ' . $errors[$code];
         }
 
-        return 'Unknown encoding error';
+        return 'Xeeder encoding: Unknown encoding error';
     }
 
     public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest, $isNew = true)
