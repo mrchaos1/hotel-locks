@@ -77,7 +77,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
         $command =
             $ddssAddress  . ($isNew ? self::FIELD_GUEST_CHECK_IN : 'G')
-            . chr(124) . self::FIELD_ROOM_NUMBER . $room->getNumber()
+            . chr(124) . self::FIELD_ROOM_NUMBER . implode(',', $room->getDoorCodes())
             . chr(124) . self::FIELD_CARD_TYPE . '04'
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
