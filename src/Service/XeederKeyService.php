@@ -3,6 +3,7 @@
 namespace Wintech\HotelLocks\Service;
 
 use Wintech\HotelLocks\Exception\HotelLockException;
+use Wintech\HotelLocks\Exception\XeederLockException;
 use Wintech\HotelLocks\Object\Guest;
 use Wintech\HotelLocks\Object\RoomDoor;
 use Wintech\HotelLocks\Validator\DdssAddressValidator;
@@ -20,7 +21,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
      */
     public function __construct(?string $serverAddress)
     {
-       $this->serverAddress = $serverAddress;
+        $this->serverAddress = $serverAddress;
     }
 
     const FIELD_GUEST_CHECK_IN    = '0I';
@@ -36,7 +37,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         DdssAddressValidator::validate($ddssAddress);
 
         $command =
-              $ddssAddress  . ($isNew ? self::FIELD_GUEST_CHECK_IN : 'G')
+            $ddssAddress  . ($isNew ? self::FIELD_GUEST_CHECK_IN : 'G')
             . chr(124) . self::FIELD_ROOM_NUMBER . $room->getNumber()
             . chr(124) . self::FIELD_CARD_TYPE . '04'
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
@@ -77,6 +78,6 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             return true;
         }
 
-        return false;
+        throw new XeederLockException("Card encoding error: $contents");
     }
 }
