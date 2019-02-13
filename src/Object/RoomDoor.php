@@ -14,10 +14,15 @@ class RoomDoor
     private $doorCodes;
 
     /**
-     * RoomDoor constructor.
-     * @param array $doorCodes
+     * @var array
      */
-    function __construct(array $doorCodes)
+    private $commonDoorCodes;
+
+    /**
+     * @param array $doorCodes
+     * @param array $commonDoorCodes
+     */
+    function __construct(array $doorCodes, array $commonDoorCodes)
     {
         $this->doorCodes = $doorCodes;
     }
@@ -28,6 +33,14 @@ class RoomDoor
     public function getDoorCodes(): array
     {
         return $this->doorCodes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCommonDoorCodes(): array
+    {
+        return $this->commonDoorCodes;
     }
 
 }
