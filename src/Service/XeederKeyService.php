@@ -27,7 +27,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
     const FIELD_GUEST_CHECK_IN           = '0I';
     const FIELD_GUEST_CHECK_OUT          = '0B';
     const FIELD_ROOM_NUMBERS             = 'R';
-    const FIELD_COMMON_ROOM_NUMBERS      = 'R';
+    const FIELD_COMMON_ROOM_NUMBERS      = 'C';
     const FIELD_GUEST_NAME               = 'N';
     const FIELD_CARD_TYPE                = 'T';
 
@@ -78,6 +78,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         $command =
             $ddssAddress  . ($isNew ? self::FIELD_GUEST_CHECK_IN : 'G')
             . chr(124) . self::FIELD_ROOM_NUMBERS . implode(',', $room->getDoorCodes())
+            . chr(124) . self::FIELD_COMMON_ROOM_NUMBERS . implode(',', $room->getCommonDoorCodes())
             . chr(124) . self::FIELD_CARD_TYPE . '04'
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
