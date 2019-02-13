@@ -24,13 +24,14 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         $this->serverAddress = $serverAddress;
     }
 
-    const FIELD_GUEST_CHECK_IN    = '0I';
-    const FIELD_GUEST_CHECK_OUT   = '0B';
-    const FIELD_ROOM_NUMBER       = 'R';
-    const FIELD_GUEST_NAME        = 'N';
-    const FIELD_CARD_TYPE         = 'T';
+    const FIELD_GUEST_CHECK_IN           = '0I';
+    const FIELD_GUEST_CHECK_OUT          = '0B';
+    const FIELD_ROOM_NUMBERS             = 'R';
+    const FIELD_COMMON_ROOM_NUMBERS      = 'R';
+    const FIELD_GUEST_NAME               = 'N';
+    const FIELD_CARD_TYPE                = 'T';
 
-    const RESPONSE_OK             = '00';
+    const RESPONSE_OK                    = '00';
 
     /**
      * @param $code
@@ -63,8 +64,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             chr(2).'000023'.chr(3) => 'Not Guest Card',
         ];
 
-        if(isset($errors[$code]))
-        {
+        if(isset($errors[$code])) {
            return $errors[$code];
         }
 
@@ -77,7 +77,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
         $command =
             $ddssAddress  . ($isNew ? self::FIELD_GUEST_CHECK_IN : 'G')
-            . chr(124) . self::FIELD_ROOM_NUMBER . implode(',', $room->getDoorCodes())
+            . chr(124) . self::FIELD_ROOM_NUMBERS . implode(',', $room->getDoorCodes())
             . chr(124) . self::FIELD_CARD_TYPE . '04'
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
