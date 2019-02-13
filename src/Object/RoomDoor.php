@@ -25,6 +25,7 @@ class RoomDoor
     function __construct(array $doorCodes, array $commonDoorCodes)
     {
         $this->doorCodes = $doorCodes;
+        $this->commonDoorCodes = $commonDoorCodes;
     }
 
     /**
@@ -38,7 +39,7 @@ class RoomDoor
     /**
      * @return array
      */
-    public function getCommonDoorCodes(): array
+    public function getCommonDoorCodes(): ?array
     {
         return $this->commonDoorCodes;
     }
