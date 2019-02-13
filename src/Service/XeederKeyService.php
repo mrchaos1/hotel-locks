@@ -98,7 +98,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
         $command =
             $ddssAddress  . self::FIELD_GUEST_CHECK_OUT
-            . chr(124) . self::FIELD_ROOM_NUMBER . $room->getNumber()
+            . chr(124) . self::FIELD_ROOM_NUMBERS . implode(',', $room->getDoorCodes())
         ;
 
         return $this->sendCommand($command);
