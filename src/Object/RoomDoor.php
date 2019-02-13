@@ -9,25 +9,25 @@ namespace Wintech\HotelLocks\Object;
 class RoomDoor
 {
     /**
-     * @var
+     * @var array
      */
-    private $number;
+    private $doorCodes;
 
     /**
-     * Room constructor.
-     * @param $roomNumber
+     * RoomDoor constructor.
+     * @param array $doorCodes
      */
-    function __construct($roomNumber)
+    function __construct(array $doorCodes)
     {
-        $this->number = $roomNumber;
+        $this->doorCodes = $doorCodes;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getNumber()
+    public function getDoorCodes(): array
     {
-        return $this->number;
+        return $this->doorCodes;
     }
 
 }
