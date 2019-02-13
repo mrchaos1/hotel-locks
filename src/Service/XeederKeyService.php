@@ -32,6 +32,45 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
     const RESPONSE_OK             = '00';
 
+    /**
+     * @param $code
+     *
+     * @return null|string
+     */
+    private static function getErrorMessageByCode($code): ?string
+    {
+        $errors = [
+            chr(2).'000001'.chr(2) => 'No card',
+            chr(2).'000002'.chr(2) => 'No encoder found',
+            chr(2).'000003'.chr(2) => 'Invalid card',
+            chr(2).'000004'.chr(2) => 'Card type error',
+            chr(2).'000005'.chr(2) => 'Card read/write error',
+            chr(2).'000006'.chr(2) => 'Com port is not open',
+            chr(2).'000007'.chr(2) => 'Read Query card ok',
+            chr(2).'000008'.chr(2) => 'Invalid parameter',
+            chr(2).'000009'.chr(2) => 'Operating not support',
+            chr(2).'000010'.chr(2) => 'Other error',
+            chr(2).'000011'.chr(2) => 'Port is in using',
+            chr(2).'000012'.chr(2) => 'Communication error',
+            chr(2).'000013'.chr(2) => 'Card is not empty, revoke it firstly',
+            chr(2).'000014'.chr(2) => 'Failed! Card Encryption is unknown',
+            chr(2).'000015'.chr(2) => 'Operating failed',
+            chr(2).'000016'.chr(2) => 'Unknown error',
+            chr(2).'000017'.chr(2) => 'Card count over limit',
+            chr(2).'000018'.chr(2) => 'Invalid room number',
+            chr(2).'000019'.chr(2) => 'Please input one room number',
+            chr(2).'000020'.chr(2) => 'Empty card',
+            chr(2).'000023'.chr(2) => 'Not Guest Card',
+        ];
+
+        if(isset($errors[$code]))
+        {
+           return $errors[$code];
+        }
+
+        return 'Unknown encoding error';
+    }
+
     public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest, $isNew = true)
     {
         DdssAddressValidator::validate($ddssAddress);
@@ -51,7 +90,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
     {
         DdssAddressValidator::validate($ddssAddress);
 
-        $str =
+        $command =
             $ddssAddress  . self::FIELD_GUEST_CHECK_OUT
             . chr(124) . self::FIELD_ROOM_NUMBER . $room->getNumber()
         ;
@@ -78,6 +117,6 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             return true;
         }
 
-        throw new XeederLockException("Card encoding error: $contents");
+        throw new XeederLockException(self::getErrorMessageByCode($contents));
     }
 }
