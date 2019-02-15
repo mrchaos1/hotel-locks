@@ -112,7 +112,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             throw new HotelLockException();
         }
 
-        fwrite($stream, chr(2).$commandString.chr(3));
+        fwrite($stream, iconv("UTF-8", "CP1251", (chr(2).$commandString.chr(3))));
         stream_socket_shutdown($stream, STREAM_SHUT_WR); /* This is the important line */
 
         $contents = stream_get_contents($stream);
