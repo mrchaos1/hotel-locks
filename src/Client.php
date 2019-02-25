@@ -15,9 +15,9 @@ class Client
         $this->keyService = $keyService;
     }
 
-    public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest)
+    public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest, $isNew = true)
     {
-        return $this->keyService->guestCheckIn($ddssAddress, $room, $guest);
+        return $this->keyService->guestCheckIn($ddssAddress, $room, $guest, $isNew);
     }
 
     public function guestCheckOut($ddss, RoomDoor $room)
