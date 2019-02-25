@@ -8,6 +8,8 @@ use Wintech\HotelLocks\Object\Guest;
 
 class Client
 {
+    const SERVICE_XEEDER = \Wintech\HotelLocks\Service\XeederKeyService::class;
+
     private $keyService;
 
     public function __construct(KeyServiceInterface $keyService)
