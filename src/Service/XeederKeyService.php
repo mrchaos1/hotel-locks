@@ -79,7 +79,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
      *
      * @return bool|string
      */
-    public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest, $isNew)
+    public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest, $isNew = true)
     {
         DdssAddressValidator::validate($ddssAddress);
 
