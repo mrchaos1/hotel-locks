@@ -71,6 +71,14 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         return 'Xeeder encoding: Unknown encoding error';
     }
 
+    /**
+     * @param string $ddssAddress
+     * @param RoomDoor $room
+     * @param Guest $guest
+     * @param bool $isNew
+     *
+     * @return bool|string
+     */
     public function guestCheckIn($ddssAddress, RoomDoor $room, Guest $guest, $isNew = true)
     {
         DdssAddressValidator::validate($ddssAddress);
@@ -82,16 +90,22 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
             . chr(124) . 'O' . $guest->getCheckOutTime()->format('YmdHi')
+            . chr(124) . 'V' . ($isNew ? 'N' : 'D')
         ;
 
-        if($room->getCommonDoorCodes())
-        {
+        if ($room->getCommonDoorCodes()) {
             $command .= chr(124) . self::FIELD_COMMON_ROOM_NUMBERS . implode('', $room->getCommonDoorCodes());
         }
 
         return $this->sendCommand($command);
     }
 
+    /**
+     * @param string $ddssAddress
+     * @param RoomDoor $room
+     *
+     * @return bool|string
+     */
     public function guestCheckOut($ddssAddress, RoomDoor $room)
     {
         DdssAddressValidator::validate($ddssAddress);
@@ -104,6 +118,11 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         return $this->sendCommand($command);
     }
 
+    /**
+     * @param string $commandString
+     *
+     * @return bool
+     */
     public function sendCommand(string $commandString)
     {
         $stream = stream_socket_client($this->serverAddress, $errno, $errstr, 10);
