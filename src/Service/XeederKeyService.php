@@ -84,7 +84,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         DdssAddressValidator::validate($ddssAddress);
 
         $command =
-            $ddssAddress  . ($isNew ? self::FIELD_GUEST_CHECK_IN : 'G')
+            $ddssAddress  . self::FIELD_GUEST_CHECK_IN
             . chr(124) . self::FIELD_ROOM_NUMBERS . implode(',', $room->getDoorCodes())
             . chr(124) . self::FIELD_CARD_TYPE . '04'
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
