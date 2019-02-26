@@ -90,7 +90,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
             . chr(124) . 'O' . $guest->getCheckOutTime()->format('YmdHi')
-            . chr(124) . 'V' . ($isNew ? 'N' : 'D')
+            . chr(124) . ($isNew ? 'VN' : '')
         ;
 
         if ($room->getCommonDoorCodes()) {
