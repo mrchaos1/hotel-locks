@@ -83,11 +83,19 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
     {
         DdssAddressValidator::validate($ddssAddress);
 
+        $guestName = strtr($guest->getFullName(), [
+            'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü' => 'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ҡ' => 'k',
+        ]);
+
         $command =
             $ddssAddress  . self::FIELD_GUEST_CHECK_IN
             . chr(124) . self::FIELD_ROOM_NUMBERS . implode(',', $room->getDoorCodes())
             . chr(124) . self::FIELD_CARD_TYPE . '04'
-            . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
+            . chr(124) . self::FIELD_GUEST_NAME . $guestName
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
             . chr(124) . 'O' . $guest->getCheckOutTime()->format('YmdHi')
             . chr(124) . ($isNew ? 'VN' : '')
