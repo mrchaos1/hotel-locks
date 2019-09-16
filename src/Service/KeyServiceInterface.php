@@ -8,7 +8,7 @@ interface KeyServiceInterface
 {
     /**
      * @param string $ddssAddress
-     * @param Room $room
+     * @param RoomDoor $room
      * @param Guest $guest
      * @param bool $isNew
      *
@@ -18,7 +18,7 @@ interface KeyServiceInterface
 
     /**
      * @param string $ddss
-     * @param Room $room
+     * @param RoomDoor $room
      *
      * @return string
      */
