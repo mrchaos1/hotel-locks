@@ -2,6 +2,7 @@
 
 namespace Wintech\HotelLocks\Service;
 
+use Psr\Log\LoggerInterface;
 use Wintech\HotelLocks\Exception\HotelLockException;
 use Wintech\HotelLocks\Exception\XeederLockException;
 use Wintech\HotelLocks\Object\Guest;
@@ -16,12 +17,18 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
     private $serverAddress;
 
     /**
-     * XeederKeyService constructor.
-     * @param string $serverAddress
+     * @var LoggerInterface
      */
-    public function __construct(?string $serverAddress)
+    private $logger;
+
+    /**
+     * @param string $serverAddress
+     * @param LoggerInterface $logger
+     */
+    public function __construct(?string $serverAddress, LoggerInterface $logger)
     {
         $this->serverAddress = $serverAddress;
+        $this->logger = $logger;
     }
 
     const FIELD_GUEST_CHECK_IN           = '0I';
@@ -65,10 +72,10 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
         ];
 
         if(isset($errors[$code])) {
-           return 'Xeeder encoding error ' . $errors[$code];
+            return 'Xeeder encoding error ' . $errors[$code];
         }
 
-        return 'Xeeder encoding: Unknown encoding error';
+        return 'Xeeder encoding: Unknown encoding error: ' . $code;
     }
 
     /**
@@ -83,19 +90,11 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
     {
         DdssAddressValidator::validate($ddssAddress);
 
-        $guestName = strtr($guest->getFullName(), [
-            'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
-            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
-            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü' => 'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ҡ' => 'k',
-        ]);
-
         $command =
             $ddssAddress  . self::FIELD_GUEST_CHECK_IN
             . chr(124) . self::FIELD_ROOM_NUMBERS . implode(',', $room->getDoorCodes())
             . chr(124) . self::FIELD_CARD_TYPE . '04'
-            . chr(124) . self::FIELD_GUEST_NAME . $guestName
+            . chr(124) . self::FIELD_GUEST_NAME . $guest->getFullName()
             . chr(124) . 'D' . $guest->getCheckInTime()->format('YmdHi')
             . chr(124) . 'O' . $guest->getCheckOutTime()->format('YmdHi')
             . chr(124) . ($isNew ? 'VN' : '')
@@ -133,6 +132,10 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
      */
     public function sendCommand(string $commandString)
     {
+        $this->logger->info('Sending command', [
+            'command' => $commandString,
+        ]);
+
         $stream = stream_socket_client($this->serverAddress, $errno, $errstr, 10);
 
         if (!$stream) {
@@ -144,11 +147,17 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
 
         $contents = stream_get_contents($stream);
 
+        $this->logger->info('Sending command response', [
+            'contents' => $contents,
+        ]);
+
         fclose($stream);
 
         if ($contents == chr(2).'0000'.self::RESPONSE_OK.chr(3)) {
             return true;
         }
+
+
 
         throw new XeederLockException(self::getErrorMessageByCode($contents));
     }
