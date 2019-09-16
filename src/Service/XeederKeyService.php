@@ -75,7 +75,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             return 'Xeeder encoding error ' . $errors[$code];
         }
 
-        return 'Xeeder encoding: Unknown encoding error: ' . $code;
+        return 'Xeeder encoding: Unknown encoding error';
     }
 
     /**
@@ -157,8 +157,6 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             return true;
         }
 
-
-
-        throw new XeederLockException(self::getErrorMessageByCode($contents));
+        throw new XeederLockException(self::getErrorMessageByCode($contents) . '. Response: '. $contents);
     }
 }
