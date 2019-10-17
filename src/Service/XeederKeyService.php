@@ -98,7 +98,7 @@ class XeederKeyService extends KeyService implements KeyServiceInterface
             'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü' => 'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ҡ' => 'k',
         ]);
 
-        $guestName = preg_replace('/[^А-Яа-яA-Za-z0-9,.;:"!@№$%^&*#()_+-=* ]+/', '?', $guestName);
+        $guestName = preg_replace('/[^А-Яа-яA-Za-z0-9,.;:"!@№$%^&*#()_+-=* ]+/u', '?', $guestName);
 
         $command =
             $ddssAddress  . self::FIELD_GUEST_CHECK_IN
